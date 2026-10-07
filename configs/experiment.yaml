@@ -1,0 +1,115 @@
+meta:
+  project: rlhoneypot
+  version: 0.1.0
+  source_paper: "Var Naseri et al. 2026, IJIS 25:60, doi:10.1007/s10207-026-01221-5"
+
+seeds:
+  master: 20260214          
+
+corpus:
+  phase1:
+    sessions_full: 410198         
+    sessions_default: 60000       
+    days: 21                      
+    commands_per_prompt: [1, 8]    
+  phase2:
+    sessions_full: 248338          
+    sessions_default: 40000
+    days: 21
+
+mdp:
+  hyperoffline:                  
+    alpha: 0.1
+    gamma: 0.9                   
+    epsilon: 0.1
+    episodes: 1000
+    max_steps: 100
+  hyperonline:                
+    alpha: 0.01
+    gamma: 0.95
+    epsilon: 0.1
+    episodes: 1000
+    max_steps: 100
+
+transitions:
+  laplace_alpha: 1.0           
+  min_support_flag: 30           
+
+env:
+  version: v0
+  id_tabular: rlhoneypotResponse-v0
+  id_contextual: rlhoneypotResponseContextual-v0
+  id_siem: rlhoneypotResponseSIEM-v0
+  attacker_model: mdpsim          
+  include_auth_steps: true       
+
+agents:
+  tabular:
+    optimistic_init: 0.0         
+  bandit:
+    epsilon: 0.1
+  contextual_bandit:
+    epsilon: 0.1
+    lr: 0.05
+  supervised:
+    model: logistic              
+    C: 1.0
+  dqn:                            
+    hidden: [64, 64]
+    lr: 0.0003
+    batch_size: 64
+    replay_capacity: 50000
+    warmup_steps: 500
+    target_sync: 200
+    double_q: true
+    grad_clip: 10.0
+    warm_start_bc_steps: 300       
+    warm_start_lr: 0.001
+    compare_episodes: 3000        
+    epsilon_decay_steps: 9000      
+
+scale:
+  k_values: [1, 4, 16, 64, 256]  
+  k_values_quick: [1, 16]
+  structures: [shared, randomised]
+  seeds: 5
+  seeds_quick: 2
+  episodes: 800                  
+  episodes_quick: 400
+  eval_episodes: 200
+  eval_episodes_quick: 40
+  epsilon_decay_frac: 0.5      
+  randomised_reward_sigma: 6.0   
+  reward_noise_sigma: 4.0      
+  dqn_warmup_steps: 200         
+
+ope:
+  logging_epsilon: 0.3          
+  bootstrap_resamples: 10000
+  ci_level: 0.95
+
+eval:
+  eval_episodes: 400       
+  num_seeds: 10                   
+  rolling_window: 50               
+  precision_at_k: [10, 50, 100]
+
+siem:
+  mode: offline                  
+  alert_rate_per_state:        
+    - 0.02   
+    - 0.05   
+    - 0.03
+    - 0.04
+    - 0.02
+    - 0.01   
+    - 0.005  
+    - 0.01
+  noise_rate: 0.10                 
+  reward_shaping_alpha: 0.5       
+
+anomaly:
+  contamination: 0.02
+  method: isolation_forest
+  ae_latent: 4
+  ae_epochs: 40

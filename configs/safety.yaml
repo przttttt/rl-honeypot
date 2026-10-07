@@ -1,0 +1,15 @@
+sandbox:
+  require_env_var: true       
+
+action_filter:
+  enabled: true
+  block_allow_states: [5, 6, 7]
+
+insult_rate_cap:
+  enabled: true
+  max_per_session: 2          
+  strict_mode_blocks_all: true
+
+terminate:
+  enabled: true
+  note: "terminate ends the episode; cost applied in reward (D4)"

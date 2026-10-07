@@ -1,0 +1,45 @@
+mode: offline          
+offline:
+  index: rlhoneypot-cowrie-ecs
+live:
+  endpoint_env: OPENSEARCH_URL   
+  index: rlhoneypot-cowrie-ecs
+  bulk_chunk_bytes: 5242880
+wazuh:
+  rule_id_base: 100100         
+  rules:
+    - id_offset: 0
+      name: cowrie_recon_activity
+      mapped_state: 0
+      level: 3
+    - id_offset: 1
+      name: cowrie_login_attempt
+      mapped_state: 1
+      level: 5
+    - id_offset: 2
+      name: cowrie_foothold_file_modification
+      mapped_state: 2
+      level: 8
+    - id_offset: 3
+      name: cowrie_privilege_escalation
+      mapped_state: 3
+      level: 10
+    - id_offset: 4
+      name: cowrie_defense_evasion
+      mapped_state: 4
+      level: 10
+    - id_offset: 5
+      name: cowrie_resource_hijacking
+      mapped_state: 5
+      level: 12
+    - id_offset: 6
+      name: cowrie_c2_channel
+      mapped_state: 6
+      level: 12
+    - id_offset: 7
+      name: cowrie_persistence
+      mapped_state: 7
+      level: 12
+serialization:
+  format: ecs
+  bulk: ndjson
